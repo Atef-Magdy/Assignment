@@ -1,0 +1,269 @@
+    #include <bits/stdc++.h>
+    #include<fstream>
+
+    using namespace std;
+
+    string LoadFile();
+    void CreateFile();
+    void Display(string name);
+    void Save(string name);
+    int CountWords(string name);
+    int countChar(string name);
+    void FindWord(string name);
+    void Empty(string name);
+    void input();
+    void ReplaceWord(string name);
+    void UpperCase();
+    void LowerCase();
+    void AddFile();
+    void Cipher(string name);
+    int main()
+    {
+        string name;
+        int number;
+        cout << "Ahlan ya user ya hbibi. \nWhat do you like to do today? \n\n";
+    while(true){
+        cout <<"1-  Load an existing file \n2-  Create a new file \n3-  Display file content \n4-  Save the loaded text to the same file again or different one \n5-  Count the words and the characters in the file\n";
+        cout << "6-  Search for a word in a file \n7-  Empty file content \n8-  Add more content to the end of the file \n9-  Replace a word in the file with another word \n10- Turn all the content file to upper case\n";
+        cout <<"11- Turn all the content file to lower case \n12- Add another file to the end of the current file \n13- Encrypt and decrypt the file \n14- End\n\n";
+        int choice;
+        cout << "Enter your choice : ";
+        cin >> choice;
+        while(choice > 14 || choice<1) cin >> choice;
+        if     (choice==1) name =LoadFile();
+        else if(choice==2) CreateFile();
+        else if(choice==3) Display(name);
+        else if(choice==4) Save(name);
+        else if(choice==5){ cout << "Number of words = " << CountWords(name) << endl;
+                            cout << "Number of Characters = " << countChar(name) << endl << endl;}
+        else if(choice==6) FindWord(name);
+        else if(choice==7) Empty(name);
+        else if(choice==8) input();
+        else if(choice==9) ReplaceWord(name);
+        else if(choice==10) UpperCase();
+        else if(choice==11) LowerCase();
+        else if(choice==12) AddFile();
+        else if(choice==13) Cipher(name);
+        else if(choice==14){ cout << "\nKher ma 3mlt walahy." << endl << endl;
+                            break;}
+    }
+    cout << endl;
+        return 0;
+    }
+    string LoadFile(){
+        fstream file;
+        char name[81];
+        cout << "Enter the file name :";
+        cin >> name;
+        file.open(name,ios::in);
+        if(file.fail()) cout << "\nError!. file not exist\n";
+        else  cout << "\nThe file loaded successfully.\n\n";
+
+        return name;
+    }
+    void Display(string name){
+        fstream file;
+        char text;
+        file.open(name,ios::in);
+        cout << endl ;
+        while(!file.eof() && !file.fail()){
+            file.get(text);
+            cout << text;
+            }
+        cout << endl << endl;
+    return;
+    }
+    void CreateFile(){
+        fstream file;
+        char name[81];
+        cout << "Enter the file name : ";
+        cin >> name;
+        file.open(name,ios::out);
+        cout << "The file created successfully" << endl;
+    return;
+    }
+    void input(){
+        fstream file;
+        char ch;
+        char name[81];
+        cout << "Enter the file name : ";
+        cin >> name;
+        file.open(name,ios::app);
+        cout << "End your text , End by ( ~ )" <<endl;
+        cout << "Write in the file : ";
+        cin.get(ch);
+        while(ch!='~'){
+        file.put(ch);
+        cin.get(ch);
+        }
+    return;
+    }
+    int  CountWords(string name){
+        fstream file;
+        string word;
+        int j=0;
+        file.open(name,ios::in);
+           while(!file.eof() && !file.fail() && file >> word){
+             j+=1;
+           }
+           return j;
+
+    }
+    int countChar(string name){
+         fstream file;
+        char data;
+        int i=0;
+        file.open(name,ios::in);
+        while(!file.eof() && !file.fail() && file >> data){
+           if(isalpha(data)){
+             i+=1;
+           }}
+        return i;
+    }
+    void FindWord(string name){
+        fstream file;
+        string word, Find;
+        int count=0;
+        cout<<"enter the word you want to search: ";
+        cin>>Find;
+         file.open(name,ios::in);
+           while(!file.eof()&& !file.fail()){
+             file >> word;
+             if(word==Find)  count+=1;
+
+    }
+       if(count>=1) cout<<"the word is found"<<endl << endl;
+       else cout<<"the word is not found"<<endl << endl;
+    }
+    void Empty(string name){
+        fstream file;
+        file.open(name,ios::out);
+        cout<<"the file is empty successfully" << endl << endl;
+
+    }
+    void UpperCase(){
+        fstream file;
+        char name[81] , ch;
+        vector<char> container;
+        cout << "Enter the file name : ";
+        cin >> name;
+        file.open(name,ios::in);
+        while(!file.eof() && !file.fail()){
+            file.get(ch);
+            container.push_back(toupper(ch));
+        }
+        file.close();
+        file.open(name,ios::out);
+        for(int i=0 ; i<container.size()-1 ; ++i){
+            file.put(container[i]);
+        }
+        file.close();
+    return;
+    }
+    void LowerCase(){
+        fstream file;
+        char name[81] , ch;
+        vector<char> container;
+        cout << "Enter the file name : ";
+        cin >> name;
+        file.open(name,ios::in);
+        while(!file.eof() && !file.fail()){
+            file.get(ch);
+            container.push_back(tolower(ch));
+        }
+        file.close();
+        file.open(name,ios::out);
+        for(int i=0 ; i<container.size()-1 ; ++i){
+            file.put(container[i]);
+        }
+        file.close();
+    return;
+    }
+    void ReplaceWord(string name){
+        fstream file , temp;
+        char get[50];
+        string word , modify;
+        cout << "Enter existing word: ";
+        cin >> word;
+        cout << "Enter new word: ";
+        cin >> modify;
+        file.open(name,ios::in);
+        temp.open("temp.txt",ios::out);
+        while(!file.eof() && !file.fail()){
+            file.getline(get,50,' ');
+            if(get==word) temp << modify << ' ';
+            else temp << get << ' ';
+    }
+        file.close();
+        temp.close();
+        temp.open("temp.txt",ios::in);
+        file.open(name,ios::out);
+        while(!temp.eof() && !temp.fail()){
+            temp.getline(get,50,' ');
+            file << get << ' ';
+        }
+        return;
+        }
+    void AddFile(){
+        fstream main , add ;
+        char name1[81] , name2[81] , ch;
+        cout << "Enter The main File : ";
+        cin >> name1;
+        cout << "Enter The file You want to Add : ";
+        cin >>name2;
+        main.open(name1,ios::app);
+        add.open(name2,ios::in);
+        while(!add.eof() && !main.fail() && !add.fail()){
+            add.get(ch);
+            main.put(ch);
+        }
+    return;
+    }
+    void Save(string name){
+        fstream load , file;
+        char New[81] , ch;
+        cout << "Enter the file name you want to save in it : ";
+        cin >> New;
+        if(New != name){
+            load.open(name,ios::in);
+            file.open(New,ios::out);
+            while(!load.eof() && !load.fail()){
+                load.get(ch);
+                file.put(ch);
+
+    }}
+    cout << "file saved successfully " << endl;
+    return;
+    }
+    void Cipher(string name){
+        fstream file,temp ;
+        char ch[50] , cipher,word , rep ;
+        string sentence;
+        file.open(name,ios::in);
+        temp.open("temp.txt",ios::out);
+        cout << endl;
+        while(!file.eof()&&!file.fail() && file >> sentence){
+            for (int i=0; i<sentence.length() ;i++){
+                if((sentence[i] > 64) && (sentence[i] < 91) || ((sentence[i] > 96) && (sentence[i] < 123)))
+                    cipher = (int)sentence[i] + 13;
+                else
+                    cipher = (int)sentence[i];
+                if ((cipher < 0) || (cipher > 122))
+                    cipher = cipher - 122 + 96;
+                cout << cipher;
+                temp << cipher;
+            }
+            cout << " ";
+            temp << " ";
+            }
+                file.close();
+                temp.close();
+                temp.open("temp.txt",ios::in);
+                file.open(name,ios::out);
+                while(!temp.eof() && !temp.fail()){
+                        temp.getline(ch,50,' ');
+                        file << ch << " ";
+                }
+            cout << endl << endl;
+            return;
+    }
